@@ -1,0 +1,6 @@
+{
+  "name": "hackathon",
+  "short_name": "hackathon",
+  "start_url": "/",
+  "display": "standalone"
+}

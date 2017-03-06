@@ -1,0 +1,11 @@
+{
+  "name": "hackathon",
+  "main": "index.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "bower": "*",
+    "install": "^1.0.4",
+    "leaflet-map": "^1.2.0",
+    "iron-ajax": "^1.4.3"
+  }
+}

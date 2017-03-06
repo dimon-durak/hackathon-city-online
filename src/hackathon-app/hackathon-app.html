@@ -1,0 +1,81 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/leaflet-map/leaflet-map.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="hackathon-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+        margin: 0;
+        height: 100%;
+      }
+      leaflet-map {
+        height: 100%;
+      }
+    </style>
+
+    <iron-ajax
+      auto
+      url="http://shtrih.fabit.ru/passengertransport/api/v0.1/cities/1155/stops"
+      handle-as="json"
+      on-response="stopsResponse"
+    ></iron-ajax>
+
+    <iron-ajax
+      id="positions"
+      auto
+      url="http://shtrih.fabit.ru/passengertransport/api/v0.1/cities/1155/vehicles/positions"
+      handle-as="json"
+      on-response="positionsResponse"
+    ></iron-ajax>
+
+    <leaflet-map latitude="51.273299861348995" longitude="37.5208854675293" zoom="14" >
+      <leaflet-icon id="busStop" icon-width="20" icon-height="24" icon-url="../../images/bus-station.svg"> </leaflet-icon>
+      <leaflet-icon id="bus" icon-width="20" icon-height="24" icon-url="../../images/slowpoke.svg"></leaflet-icon>
+      <template is="dom-repeat" items="[[stops]]" as="stop">
+        <leaflet-marker latitude="[[stop.coordinate.lat]]" longitude="[[stop.coordinate.lon]]" title="[[stop.name]]" icon="busStop"></leaflet-marker>
+      </template>
+      <template is="dom-repeat" items="[[buses]]" as="bus">
+        <leaflet-marker class="busMarker" latitude="[[bus.lat]]" longitude="[[bus.lon]]" title="[[bus.routeNumber]]" icon="bus"></leaflet-marker>
+      </template>
+      
+    </leaflet-map>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'hackathon-app',
+
+      properties: {
+        stops: { type: Array },
+        buses: { type: Array }
+      },
+
+      stopsResponse: function(e) {
+        this.stops = e.detail.response.stops;
+      },
+
+      positionsResponse: function(e) {
+        let buses = e.detail.response.vehicles.map(bus => {
+          return {
+            routeNumber: bus.route.route_number,
+            lat: bus.positions[0].coordinate.lat,
+            lon: bus.positions[0].coordinate.lon
+          }
+        });
+
+        this.set('buses', buses);
+        this.updateData();
+      },
+
+      updateData: function() {
+        this.async(_ => {
+          this.$.positions.generateRequest();
+        }, 2000);
+      }
+    });
+  </script>
+</dom-module>
