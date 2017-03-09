@@ -59,11 +59,11 @@
       },
 
       positionsResponse: function(e) {
-        let vehicles = e.detail.response.vehicles.map(bus => {
+        let vehicles = e.detail.response.vehicles.map(vehicle => {
           return {
-            routeNumber: bus.route.route_number,
-            lat: bus.positions[0].coordinate.lat,
-            lon: bus.positions[0].coordinate.lon
+            routeNumber: vehicle.route.route_number,
+            lat: vehicle.positions[0].coordinate.lat,
+            lon: vehicle.positions[0].coordinate.lon
           }
         });
 
