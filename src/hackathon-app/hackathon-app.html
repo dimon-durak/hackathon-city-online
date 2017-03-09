@@ -59,7 +59,7 @@
       },
 
       positionsResponse: function(e) {
-        let buses = e.detail.response.vehicles.map(bus => {
+        let vehicles = e.detail.response.vehicles.map(bus => {
           return {
             routeNumber: bus.route.route_number,
             lat: bus.positions[0].coordinate.lat,
@@ -67,7 +67,7 @@
           }
         });
 
-        this.set('buses', buses);
+        this.set('buses', vehicles);
         this.updateData();
       },
 
